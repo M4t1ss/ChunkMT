@@ -1,27 +1,68 @@
-<?php
+﻿<?php
+
+include('myParseTree.php');
 
 function chunkAfile($inputFile, $outputFile){
 	// read the input file by line
+
 	while (($input = fgets($inputFile)) !== false) {
 		$input = str_replace("\n", "", $input);
-		
-		// remove "( " from the start of the line and " )" from the end
 		$input = substr($input, 2);
 		$input = substr($input, 0, -2);
+		$input = str_replace("((", "( (", $input);
+		$input = str_replace("((", "( (", $input);
+		$input = str_replace("))", ") )", $input);
+		$input = str_replace("))", ") )", $input);
 
-		// change the brackets for easier work...
-		$input = str_replace("(","{",$input);
-		$input = str_replace(")","}",$input);
+		$tokens = explode(" ", $input);
+		unset($rootNode);
+		unset($currentNode);
 		
-		// get only the top-level phrases
-		preg_match_all('/{((?:[^{}]++|(?R))*+)}/', $input, $matches);
-		preg_match_all('/{((?:[^{}]++|(?R))*+)}/', $matches[1][0], $matches2);
+		foreach($tokens as $token){
+			if(strcmp(substr($token, 0, 1), "(") == 0){
+				//got a new phrase, create a new leaf
+				$tokenCategory = trim(substr($token, 1));
+				if(!isset($rootNode)){
+					$rootNode = new Node($tokenCategory);
+					$currentNode = $rootNode;
+					$currentNode->level = 0;
+				}else{
+					$newNode = new Node($tokenCategory);
+					$newNode->setParent($currentNode);
+					$newNode->level = $currentNode->level + 1;
+					if(!$rootNode->hasChildren())
+						$rootNode->addChild($newNode);
+					else
+						$currentNode->addChild($newNode);
+					$currentNode = $newNode;
+				}
+			}elseif(strcmp(substr($token, -1, 1), ")") == 0){
+				//phrase ended
+				//if it was a word, add to the current leaf, else go to the parent
+				$tokenWord = substr($token, 0, -1);
+				if(strlen($tokenWord) > 0){
+					$currentNode->setWord($tokenWord);
+				}
+				if($currentNode->getParent() != null)
+					$currentNode = $currentNode->getParent();
+			}
+		}
 		
-		// get the chunks
-		$cleanChunks = getCleanChunks($matches2[1]);
+		$wordCount = str_word_count($rootNode->traverse('inorder', ''));
+		$chunkSize = ceil($wordCount/4);
+		$finalChunks = array();
+		$rootNode->getChunksToSize($rootNode, $chunkSize, $finalChunks);
+		while(count($finalChunks) > 10){
+			$finalChunks = array();
+			$rootNode->clearInnerChunks($rootNode);
+			$chunkSize = $chunkSize * 1.5;
+			$rootNode->getChunksToSize($rootNode, $chunkSize, $finalChunks);
+		}
 		
-		foreach($cleanChunks as $cleanCunk){
-			fwrite($outputFile, $cleanCunk."\n");
+		$finalChunks = array_reverse($finalChunks);
+		
+		foreach($finalChunks as $finalChunk){
+			fwrite($outputFile, $finalChunk."\n");
 		}
 		fwrite($outputFile, "\n");
 	}
@@ -31,44 +72,12 @@ function chunkAfile($inputFile, $outputFile){
 
 
 
-// returns an array of clean chunks
-function getCleanChunks($chunks){
-	$cleanChunks = array();
 
-	foreach ($chunks as $chunk) {
-		if(strlen($chunk) > 0){
-			preg_match_all("/^[^\{]+/", $chunk, $constituent);
-			// if the chunk starts with a phrase identificator followed by an opening bracket...
-			if(ctype_upper(trim($constituent[0][0]))){
-				// remove everything up to the opening bracket
-				$cleanChunk = preg_replace("/^[^\{]+/", "", $chunk);
-				// remove the opening bracket and the phrase identificator (up to six capital letters and/or $ sign)
-				$cleanChunk = preg_replace("/\{[A-Z$]{1,6} /", "", $cleanChunk);
-				// clean up some symbols...
-				$cleanChunk = str_replace("{: :}", ":", $cleanChunk);
-				$cleanChunk = str_replace("{: ;}", ";", $cleanChunk);
-				$cleanChunk = str_replace("{, ,}", ",", $cleanChunk);
-				$cleanChunk = str_replace("{'' '}", "'", $cleanChunk);
-				$cleanChunk = str_replace("{`` `}", "`", $cleanChunk);
-				$cleanChunk = str_replace("{: '}", "'", $cleanChunk);
-				$cleanChunk = str_replace("{: -}", "-", $cleanChunk);
-				$cleanChunk = str_replace("{: ...}", "...", $cleanChunk);
-				// remove the remaining brackets
-				$cleanChunk = str_replace("}", "", $cleanChunk);
-				$cleanChunk = str_replace("{", "", $cleanChunk);
-				// deal with redundant spaces
-				$cleanChunk = str_replace("  ", " ", $cleanChunk);
-				$cleanChunk = str_replace("  ", " ", $cleanChunk);
-				$cleanChunk = str_replace("  ", " ", $cleanChunk);
-			}else{
-			// if the chunk does not start with a phrase identificator followed by an opening bracket...
-				// remove the phrase identificator up to five symbols followed by a space
-				$cleanChunk = preg_replace("/.{1,5}\ /", "", $chunk);
-			}
-		}
 
-		$cleanChunks[] = $cleanChunk;
-	}
 
-	return $cleanChunks;
-}
+
+
+
+
+
+
