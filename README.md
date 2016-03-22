@@ -41,7 +41,7 @@ Supported APIs
 Usage
 -----------
 
-Upload the files to your server. Set execute permissions (chmod 777) for exp.sh
+Upload the files to your server. Set execute permissions (chmod 755) for **exp.sh** and **query**
 The ChunkMT requires three parameters - the language model, input sentences, grammar file. It is run with the following command:
 
 ```
