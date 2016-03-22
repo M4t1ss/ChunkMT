@@ -2,7 +2,9 @@
 
 include('myParseTree.php');
 
-function chunkAfile($inputFile, $outputFile){
+function chunkAfile($inputFileName, $outputFileName){
+	$inputFile 	= fopen($inputFileName, "r") or die("Can't open input file!");
+	$outputFile = fopen($outputFileName, "a") or die("Can't open output file!");
 	// read the input file by line
 
 	while (($input = fgets($inputFile)) !== false) {

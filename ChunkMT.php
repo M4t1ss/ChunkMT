@@ -43,6 +43,7 @@ $outh = fopen("output.hybrid.txt", "a") or die("Can't create output file!"); 	//
 include 'API/googleTranslate.php';
 include 'API/bingTranslator.php';
 include 'API/LetsMT.php';
+include 'API/yandexTranslator.php';
 
 //Process input file by line
 if ($inCh) {
