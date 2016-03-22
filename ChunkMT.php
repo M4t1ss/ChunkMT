@@ -76,6 +76,9 @@ if ($inCh) {
 			fwrite($outb, $sentenceTwo);
 			fwrite($outl, $sentenceThree);
 			fwrite($outy, $sentenceFour);
+			
+			$sentences 		= array();
+			$perplexities 	= array();
 		
 			$sentences[] = str_replace(array("\r", "\n"), '', $sentenceOne);
 			$sentences[] = str_replace(array("\r", "\n"), '', $sentenceTwo);
@@ -104,16 +107,15 @@ if ($inCh) {
 			$lesmtSentence = trim($lesmtSentence)." ";	
 			$yandexSentence = trim($yandexSentence)." ";	
 			
-			if ($outputString == $lesmtSentence){
+			if (strcmp($outputString, $lesmtSentence) == 0){
 				$letsmtChunks++;
-			}elseif($outputString == $bingSentence){
+			}elseif(strcmp($outputString, $bingSentence) == 0){
 				$bingChunks++;
-			}elseif($outputString == $googleSentence){
+			}elseif(strcmp($outputString, $googleSentence) == 0){
 				$googleChunks++;
-			}elseif($outputString == $yandexSentence){
+			}elseif(strcmp($outputString, $yandexSentence) == 0){
 				$yandexChunks++;
 			}
-			
 		}
 	}
     fclose($inCh);
