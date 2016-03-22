@@ -53,6 +53,7 @@ if ($inCh) {
 			fwrite($outg, "\n");
 			fwrite($outb, "\n");
 			fwrite($outl, "\n");
+			fwrite($outy, "\n");
 			fwrite($outh, "\n");
 			
 		}else{
@@ -63,23 +64,28 @@ if ($inCh) {
 			$sentenceOne = translateWithGoogle($sourceLanguage, $targetLanguage, $sourceSentence);
 			$sentenceTwo = translateWithBing($sourceLanguage, $targetLanguage, $sourceSentence);
 			$sentenceThree = translateWithLetsMT($sourceSentence);
+			$sentenceFour = translateWithYandex($sourceLanguage, $targetLanguage, $sourceSentence);
 			
 			$sentenceOne = trim($sentenceOne)." ";
 			$sentenceTwo = trim($sentenceTwo)." ";
 			$sentenceThree = trim($sentenceThree)." ";
+			$sentenceFour = trim($sentenceFour)." ";
 		
 			fwrite($outg, $sentenceOne);
 			fwrite($outb, $sentenceTwo);
 			fwrite($outl, $sentenceThree);
+			fwrite($outy, $sentenceFour);
 		
 			$sentences[] = str_replace(array("\r", "\n"), '', $sentenceOne);
 			$sentences[] = str_replace(array("\r", "\n"), '', $sentenceTwo);
 			$sentences[] = str_replace(array("\r", "\n"), '', $sentenceThree);
+			$sentences[] = str_replace(array("\r", "\n"), '', $sentenceFour);
 			
 			//Get the perplexities of the translations
 			$perplexities[] = shell_exec('./exp.sh '.$languageModel.' "'.$sentenceOne.'"');
 			$perplexities[] = shell_exec('./exp.sh '.$languageModel.' "'.$sentenceTwo.'"');
 			$perplexities[] = shell_exec('./exp.sh '.$languageModel.' "'.$sentenceThree.'"');
+			$perplexities[] = shell_exec('./exp.sh '.$languageModel.' "'.$sentenceFour.'"');
 			
 			//Write the chunk with the smallest perplexity to the hybrid output
 			$outputString = $sentences[array_keys($perplexities, min($perplexities))[0]];
@@ -91,9 +97,11 @@ if ($inCh) {
 			$googleSentence = str_replace(array("\r", "\n"), '', $sentenceOne);
 			$bingSentence = str_replace(array("\r", "\n"), '', $sentenceTwo);
 			$lesmtSentence = str_replace(array("\r", "\n"), '', $sentenceThree);
+			$yandexSentence = str_replace(array("\r", "\n"), '', $sentenceFour);
 			$googleSentence = trim($googleSentence)." ";	
 			$bingSentence = trim($bingSentence)." ";	
 			$lesmtSentence = trim($lesmtSentence)." ";	
+			$yandexSentence = trim($yandexSentence)." ";	
 			
 			if ($outputString == $lesmtSentence){
 				$letsmtChunks++;
@@ -101,6 +109,8 @@ if ($inCh) {
 				$bingChunks++;
 			}elseif($outputString == $googleSentence){
 				$googleChunks++;
+			}elseif($outputString == $yandexSentence){
+				$yandexChunks++;
 			}
 			
 		}
@@ -109,6 +119,7 @@ if ($inCh) {
 	fclose($outg);
 	fclose($outb);
 	fclose($outl);
+	fclose($outy);
 	fclose($outh);
 	
 	if($writeStats){
@@ -118,6 +129,7 @@ if ($inCh) {
 		fwrite($outCount, "Google chunk count: ".$googleChunks."\n");
 		fwrite($outCount, "Bing chunk count: ".$bingChunks."\n");
 		fwrite($outCount, "LetsMT chunk count: ".$letsmtChunks."\n");
+		fwrite($outCount, "Yandex chunk count: ".$yandexChunks."\n");
 		fclose($outCount);
 	}
 }
