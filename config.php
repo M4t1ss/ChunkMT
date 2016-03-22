@@ -12,5 +12,7 @@ $BingClientSecret	= "";
 $LetsMTusername		= ""; //email
 $LetsMTpassword		= ""; //password
 $LetsMTSystemID		= "";
+//Yandex -	https://tech.yandex.com/translate/
+$YandexApiKey 		= "";
 //Write chunk selection statistics?
 $writeStats = true;

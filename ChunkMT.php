@@ -2,9 +2,9 @@
 // This is the full Syntactic Multi-System Hybrid Translator workflow all in one file
 // It requires three parameters - the language model, input sentences, grammar file
 // It is run with the following command:
-// php SMSHT.php <language model> <input sentences> <grammar>
+// php ChunkMT.php <language model> <input sentences> <grammar>
 // For example:
-// php SMSHT.php languageModel.binary inputSentences.txt eng_sm6.gr
+// php ChunkMT.php languageModel.binary inputSentences.txt eng_sm6.gr
 
 //Configuration
 include 'config.php';
