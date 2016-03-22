@@ -23,6 +23,7 @@ $totalChunks 	= 0;
 $googleChunks 	= 0;
 $bingChunks 	= 0;
 $letsmtChunks 	= 0;
+$yandexChunks 	= 0;
 
 //Parse the input sentences
 shell_exec('java -Xmx1024m -jar BerkeleyParser.jar -gr '.$grammar.' < '.$inputFile.' > '.$inputFile.'.parsed');
@@ -36,6 +37,7 @@ $inCh = fopen($inputFile.".chunked", "r") or die("Can't open input file!"); 	//C
 $outg = fopen("output.google.txt", "a") or die("Can't create output file!"); 	//Google output sentences
 $outb = fopen("output.bing.txt", "a") or die("Can't create output file!"); 		//Bing output sentences
 $outl = fopen("output.letsmt.txt", "a") or die("Can't create output file!"); 	//LetsMT output sentences
+$outy = fopen("output.yandex.txt", "a") or die("Can't create output file!"); 	//Yandex output sentences
 $outh = fopen("output.hybrid.txt", "a") or die("Can't create output file!"); 	//Hybrid output sentences
 
 include 'API/googleTranslate.php';
