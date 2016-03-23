@@ -33,7 +33,7 @@ if ($ing && $inb) {
 		unset($sentences);
 		unset($perplexities);
 		
-		if($sentenceOne == "\n" && $sentenceTwo == "\n"){
+		if(strlen(trim($sentenceOne)) == 0 && strlen(trim($sentenceTwo)) == 0){
 			$outputString = "\n";
 		}else{
 			//Use the language model ONLY if the translations differ

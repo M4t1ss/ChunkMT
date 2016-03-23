@@ -39,7 +39,7 @@ if ($ing && $inb && $inl && $iny) {
 		unset($sentences);
 		unset($perplexities);
 		
-		if($sentenceOne == "\n" && $sentenceTwo == "\n" && $sentenceThree == "\n" && $sentenceFour == "\n"){
+		if(strlen(trim($sentenceOne)) == 0 && strlen(trim($sentenceTwo)) == 0 && strlen(trim($sentenceThree)) == 0 && strlen(trim($sentenceFour)) == 0){
 			$outputString = "\n";
 		}else{
 			

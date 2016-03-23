@@ -27,13 +27,13 @@ $letsmtChunks 	= 0;
 $googleChunks 	= 0;
 
 //process input file by line
-if ($inh && $ing) {
-    while (($sentenceOne = fgets($inh)) !== false && ($sentenceTwo = fgets($ing)) !== false ) {
+if ($inl && $ing) {
+    while (($sentenceOne = fgets($inl)) !== false && ($sentenceTwo = fgets($ing)) !== false ) {
 		
 		unset($sentences);
 		unset($perplexities);
 		
-		if($sentenceOne == "\n" && $sentenceTwo == "\n"){
+		if(strlen(trim($sentenceOne)) == 0 && strlen(trim($sentenceTwo)) == 0){
 			$outputString = "\n";
 		}else{
 			//Use the language model ONLY if the translations differ
@@ -66,7 +66,7 @@ if ($inh && $ing) {
 				$googleChunks++;
 			}
 		}
-		fwrite($outl, $outputString);
+		fwrite($outh, $outputString);
 	}
 	//Write chunk counts
 	fwrite($outCount, "Total chunk count: ".$totalChunks."\n");
@@ -74,8 +74,8 @@ if ($inh && $ing) {
 	fwrite($outCount, "LetsMT chunk count: ".$letsmtChunks."\n");
 	fwrite($outCount, "Google chunk count: ".$googleChunks."\n");
 	
-	fclose($inh);
+	fclose($inl);
 	fclose($ing);
-	fclose($outl);
+	fclose($outh);
 	fclose($outCount);
 }
