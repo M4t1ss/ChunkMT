@@ -33,8 +33,8 @@ $letsmtChunks 	= 0;
 $yandexChunks 	= 0;
 
 //process input file by line
-if ($ing && $inb && $inh && $iny) {
-    while (($sentenceOne = fgets($ing)) !== false && ($sentenceTwo = fgets($inb)) !== false && ($sentenceThree = fgets($inh)) !== false  && ($sentenceFour = fgets($iny)) !== false ) {
+if ($ing && $inb && $inl && $iny) {
+    while (($sentenceOne = fgets($ing)) !== false && ($sentenceTwo = fgets($inb)) !== false && ($sentenceThree = fgets($inl)) !== false  && ($sentenceFour = fgets($iny)) !== false ) {
 		
 		unset($sentences);
 		unset($perplexities);
@@ -102,7 +102,7 @@ if ($ing && $inb && $inh && $iny) {
 	
 	fclose($ing);
 	fclose($inb);
-	fclose($inh);
+	fclose($inl);
 	fclose($iny);
 	fclose($outh);
 	fclose($outCount);
