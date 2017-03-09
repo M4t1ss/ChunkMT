@@ -58,10 +58,10 @@ if ($ing && $inb && $inl && $iny) {
 				$sentences[] = str_replace(array("\r", "\n"), '', $sentenceFour);
 				
 				//Get the perplexities of the translations
-				$perplexities[] = shell_exec('../../exp.sh '.$languageModel.' "'.$sentenceOne.'"');
-				$perplexities[] = shell_exec('../../exp.sh '.$languageModel.' "'.$sentenceTwo.'"');
-				$perplexities[] = shell_exec('../../exp.sh '.$languageModel.' "'.$sentenceThree.'"');
-				$perplexities[] = shell_exec('../../exp.sh '.$languageModel.' "'.$sentenceFour.'"');
+				$perplexities[] = shell_exec('../../queryKenLM.sh '.$languageModel.' "'.$sentenceOne.'"');
+				$perplexities[] = shell_exec('../../queryKenLM.sh '.$languageModel.' "'.$sentenceTwo.'"');
+				$perplexities[] = shell_exec('../../queryKenLM.sh '.$languageModel.' "'.$sentenceThree.'"');
+				$perplexities[] = shell_exec('../../queryKenLM.sh '.$languageModel.' "'.$sentenceFour.'"');
 				
 				$outputString = $sentences[array_keys($perplexities, min($perplexities))[0]];
 			}

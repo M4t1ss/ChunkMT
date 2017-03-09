@@ -26,7 +26,7 @@ $letsmtChunks 	= 0;
 $yandexChunks 	= 0;
 
 //Parse the input sentences
-shell_exec('java -Xmx1024m -jar BerkeleyParser.jar -gr '.$grammar.' < '.$inputFile.' > '.$inputFile.'.parsed');
+shell_exec('java -Xmx1024m -jar included/BerkeleyParser.jar -gr '.$grammar.' < '.$inputFile.' > '.$inputFile.'.parsed');
 
 //Chunk the parsed sentences
 include 'chunk.php';
@@ -86,10 +86,10 @@ if ($inCh) {
 			$sentences[] = str_replace(array("\r", "\n"), '', $sentenceFour);
 			
 			//Get the perplexities of the translations
-			$perplexities[] = shell_exec('./exp.sh '.$languageModel.' "'.$sentenceOne.'"');
-			$perplexities[] = shell_exec('./exp.sh '.$languageModel.' "'.$sentenceTwo.'"');
-			$perplexities[] = shell_exec('./exp.sh '.$languageModel.' "'.$sentenceThree.'"');
-			$perplexities[] = shell_exec('./exp.sh '.$languageModel.' "'.$sentenceFour.'"');
+			$perplexities[] = shell_exec('./queryKenLM.sh '.$languageModel.' "'.$sentenceOne.'"');
+			$perplexities[] = shell_exec('./queryKenLM.sh '.$languageModel.' "'.$sentenceTwo.'"');
+			$perplexities[] = shell_exec('./queryKenLM.sh '.$languageModel.' "'.$sentenceThree.'"');
+			$perplexities[] = shell_exec('./queryKenLM.sh '.$languageModel.' "'.$sentenceFour.'"');
 			
 			//Write the chunk with the smallest perplexity to the hybrid output
 			$outputString = $sentences[array_keys($perplexities, min($perplexities))[0]];
