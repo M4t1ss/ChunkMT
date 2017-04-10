@@ -82,8 +82,7 @@ class Node
 		return true;
 	}
 
-	//apstaigāšana
-
+	//traversal
 	public function traverse($method, $sentece) {
 		 switch($method) {
 			 case 'inorder':
@@ -190,21 +189,10 @@ class Node
 				
 				//combine one-word chunks and non alphanumerical chunks with to bigger chunks
 				if(str_word_count($node->chunk) <= 1 || strlen(preg_replace( "/[^a-zA-Z0-9]/i", "", $lastChunk )) == 0 || is_numeric(preg_replace( "/[^a-zA-Z0-9]/i", "", $lastChunk )) || is_numeric($node->chunk)){
-					// echo "oh, no!! '<b>" . $node->chunk . "</b>' is veeery small ): Can we add it to the next logical bigger chunk?<br/>";
 					$chunks[] = $node->chunk." ".$lastChunk;
-					// var_dump(array($node->chunk." ".$lastChunk, $node->level));
 				}else{
 					$chunks[] = $lastChunk;
 					$chunks[] = $node->chunk;
-					// var_dump(array(
-						// str_word_count($node->chunk),
-						// is_numeric($node->chunk),
-						// strlen(preg_replace( "/[^a-zA-Z0-9]/i", "", $lastChunk )),
-						// is_numeric(preg_replace( "/[^a-zA-Z0-9]/i", "", $lastChunk )),
-						// $node->chunk, 
-						// $lastChunk, 
-						// $node->level
-					// ));
 				}
 			}else{
 				$chunks[] = $node->chunk;
